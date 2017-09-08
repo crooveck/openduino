@@ -1,5 +1,5 @@
 HOME=$(shell pwd)
-BUILD_PATH=$(HOME)/build
+BUILD_PATH=./build
 VARIANTS_PATH=$(HOME)/../variants/standard
 
 CC=/opt/arduino-1.8.4/hardware/tools/avr/bin/avr-gcc
@@ -65,3 +65,38 @@ all:
 
 clean:
 	rm -rf $(BUILD_PATH)
+
+ASMFILES=$(wildcard *.S)    # szukam plików assemblerowych
+CFILES=$(wildcard *.c)	    # szukam plików C
+CPPFILES=$(wildcard *.cpp)  # szukam plików C++
+OBJFILES=$(addprefix ./, $(ASMFILES:.S=.S.o) $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o))	# dodaje jako prefiks scieżkę do listy plików wynikowych *.o
+
+%.S.o: %.S
+	@echo "ASSEMBLER" $@ $<
+	
+#	$(CC) -c -g -x assembler-with-cpp -flto -MMD -mmcu=atmega328p \
+#	-DF_CPU=16000000L -DARDUINO=10804 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR \
+#	-I$(HOME) -I$(VARIANTS_PATH) \
+#	$< -o $(BUILD_PATH)/core/$@
+
+%.cpp.o: %.cpp
+	@echo "C++" $@ $<
+	
+#	$(CCPP) -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -mmcu=atmega328p \
+#	-DF_CPU=16000000L -DARDUINO=10804 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR \
+#	-I$(HOME) -I$(VARIANTS_PATH) \
+#	$< -o $(BUILD_PATH)/core/$@
+	
+%.c.o: %.c
+	@echo "C" $@ $<
+	
+#	$(CC) -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega328p \
+#	-DF_CPU=16000000L -DARDUINO=10804 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR \
+#	-I$(HOME) -I$(VARIANTS_PATH) \
+#	$< -o $(BUILD_PATH)/core/$@
+	
+all1: $(OBJFILES)
+	@echo "OBJECTs:" $(OBJFILES)
+	
+	$(CAR) rcs $(BUILD_PATH)/libcore.a $(OBJFILES)
+	
