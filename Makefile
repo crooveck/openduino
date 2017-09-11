@@ -15,7 +15,7 @@ sketch:
 	
 all: arduino sketch
 	
-flash: all
+flash:
 	/opt/arduino-1.8.4/hardware/tools/avr/bin/avrdude -C/opt/arduino-1.8.4/hardware/tools/avr/etc/avrdude.conf -v -patmega328p -carduino -P/dev/ttyACM0 -b115200 -D -Uflash:w:$(BUILD_PATH)/sketch.cpp.hex:i 
 	
 clean:

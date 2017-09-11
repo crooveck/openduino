@@ -5,10 +5,23 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
+class A {
+    int a,b,c;
+    
+public:
+    A(int a, int b, int c) {
+        this->a=a;
+        this->b=b;
+        this->c=c;
+    }
+};
+
 // the loop function runs over and over again forever
 void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
+    A a(1,2,3);
+    
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(200);                       // wait for a second
+    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+    delay(200);                       // wait for a second
 }
