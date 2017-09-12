@@ -1,2 +1,4 @@
 build
 nbproject
+*.o
+*.d
