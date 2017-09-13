@@ -6,8 +6,8 @@ AR=$(ARDUINO_HOME)/hardware/tools/avr/bin/avr-gcc-ar
 # dirs
 BUILD_DIR=$(PWD)/build
 VARIANTS_DIR=$(PWD)/variants/standard
-CORE_DIR=./core
-LIBS_DIR=./libraries
+CORE_DIR=$(PWD)/core
+LIBS_DIR=$(PWD)/libraries
 # core files
 CORE_ASM=$(shell find $(CORE_DIR) -name *.S)
 CORE_ASM_OBJ=$(CORE_ASM:.S=.S.o)
@@ -22,6 +22,7 @@ LIBS_CPP_OBJ=$(LIBS_CPP:.cpp=.cpp.o)
 LIBS_C=$(shell find $(LIBS_DIR) -name *.c)
 LIBS_C_OBJ=$(LIBS_C:.c=.c.o)
 LIBS_OBJ=$(LIBS_CPP_OBJ) $(LIBS_C_OBJ)
+
 # phony
 .PHONY: core libs
 
@@ -48,7 +49,6 @@ core: $(CORE_OBJ)
 	$(AR) rcs $(BUILD_DIR)/libarduino.a $(CORE_OBJ)
 	
 libs: $(LIBS_OBJ)
-	@echo "KOMPILUJE BIBLIOTEKI"  $(LIBS_OBJ)
 	$(AR) rcs $(BUILD_DIR)/libarduino.a $(LIBS_OBJ)
 
 prepare:
