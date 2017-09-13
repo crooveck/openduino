@@ -13,7 +13,7 @@ arduino:
 	cd ./arduino && make all;
 		
 sketch:
-	$(CC) -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o $(BUILD_DIR)/sketch.cpp.elf -I$(PWD)/arduino/core -I$(PWD)/arduino/variants/standard $(PWD)/sketch.cpp  $(PWD)/arduino/build/libarduino.a  -lm
+	$(CC) -w -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o $(BUILD_DIR)/sketch.cpp.elf -I$(PWD)/arduino/core -I$(PWD)/arduino/libraries -I$(PWD)/arduino/variants/standard $(PWD)/sketch.cpp  $(PWD)/arduino/build/libarduino.a  -lm
 	$(OBJCOPY) -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  $(BUILD_DIR)/sketch.cpp.elf $(BUILD_DIR)/sketch.cpp.eep
 	$(OBJCOPY) -O ihex -R .eeprom  $(BUILD_DIR)/sketch.cpp.elf $(BUILD_DIR)/sketch.cpp.hex
 	
