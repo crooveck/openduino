@@ -1,10 +1,9 @@
-#arduino tools
+# arduino tools
 ARDUINO_HOME=/opt/arduino-1.8.4
 CC=$(ARDUINO_HOME)/hardware/tools/avr/bin/avr-gcc
 CPP=$(ARDUINO_HOME)/hardware/tools/avr/bin/avr-g++
 AR=$(ARDUINO_HOME)/hardware/tools/avr/bin/avr-gcc-ar
 # dirs
-
 BUILD_DIR=$(PWD)/build
 VARIANTS_DIR=$(PWD)/variants/standard
 CORE_DIR=./core
@@ -17,14 +16,12 @@ CORE_C_OBJ=$(CORE_C:.c=.c.o)
 CORE_CPP=$(shell find $(CORE_DIR) -name *.cpp)
 CORE_CPP_OBJ=$(CORE_CPP:.cpp=.cpp.o)
 CORE_OBJ=$(CORE_ASM_OBJ) $(CORE_C_OBJ) $(CORE_CPP_OBJ)
-#CORE_OBJ=$(subst core,build,$(CORE_ASM_OBJ)) $(subst core,build,$(CORE_C_OBJ)) $(subst core,build,$(CORE_CPP_OBJ))
-
 # libraries files
 LIBS_CPP=$(shell find $(LIBS_DIR) -name *.cpp)
 LIBS_CPP_OBJ=$(LIBS_CPP:.cpp=.cpp.o)
 LIBS_C=$(shell find $(LIBS_DIR) -name *.c)
 LIBS_C_OBJ=$(LIBS_C:.c=.c.o)
-LIBS_OBJ=$(LIBS_CPP) $(LIBS_C)
+LIBS_OBJ=$(LIBS_CPP_OBJ) $(LIBS_C_OBJ)
 # phony
 .PHONY: core libs
 
@@ -48,15 +45,16 @@ LIBS_OBJ=$(LIBS_CPP) $(LIBS_C)
 	
 core: $(CORE_OBJ)
 	$(eval CORE_OBJ=$(subst core,build,$(CORE_OBJ)))
-	$(AR) rcs $(BUILD_DIR)/libcore.a $(CORE_OBJ)
-#	@echo "PAKUJE DO LIBA:" $(CORE_OBJ)
-	
+	$(AR) rcs $(BUILD_DIR)/libarduino.a $(CORE_OBJ)
 	
 libs: $(LIBS_OBJ)
-	@echo "KOMPILUJE BIBLIOTEKI"  $(LIBS_OBJ) $(input)
+	@echo "KOMPILUJE BIBLIOTEKI"  $(LIBS_OBJ)
+	$(AR) rcs $(BUILD_DIR)/libarduino.a $(LIBS_OBJ)
+
+prepare:
+	mkdir -p $(BUILD_DIR)/utility
 	
-	
-all: core libs
+all: prepare core libs
 	
 clean:
-	rm $(BUILD_DIR)/*
+	rm -rf $(BUILD_DIR)
